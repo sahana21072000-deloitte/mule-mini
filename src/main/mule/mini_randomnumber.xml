@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="b674ca87-dadb-448f-9cf3-c3b92ce875cb" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="mini_randomnumberFlow" doc:id="e986547d-96bf-47b5-87e5-80928f6354b6" >
+		<http:listener doc:name="Listener" doc:id="49e7ce4f-5281-48cd-85c6-bd2694b82c22" config-ref="HTTP_Listener_config" path="/random"/>
+		<ee:transform doc:name="Transform Message" doc:id="26dc42b3-3744-4cc2-b9eb-a84f613a5d03" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+import java!mini_randomnumber::random_number
+
+ 
+
+output application/json
+---
+{
+    a : random_number::randomNumber(payload.a,payload.b)
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
